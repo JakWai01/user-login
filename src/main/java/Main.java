@@ -1,10 +1,14 @@
+import org.json.simple.JSONObject;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Main {
-    public static void main(String[] args) throws NoSuchAlgorithmException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
 
 
 
@@ -16,8 +20,15 @@ public class Main {
         System.out.println("Enter password: ");
         String password = encryptThisString(scan.nextLine());
 
+        // besser implementieren
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("key", "value");
+        jsonObject.put("key2", "value2");
+        FileWriter file = new FileWriter("output.json");
+        file.write(jsonObject.toJSONString());
+        file.close();
 
-        dict.put(encryptThisString("robert"), encryptThisString("password123"));
+        dict.put("50a9ac4b554ca3bbd4b4ddf0f284fdfb5031d8eddb4131d3c2c54f0bd8ae2038be250dc1daf93b05bd73bfda51dc734b2a3d071dcbe329d41a989142d1e77d70", encryptThisString("password123"));
 
 
         Main check = new Main();
