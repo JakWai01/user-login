@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="userlogin" />
+        <module name="user-login" />
       </profile>
     </annotationProcessing>
   </component>

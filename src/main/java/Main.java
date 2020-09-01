@@ -1,14 +1,15 @@
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Main {
-    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, ParseException {
 
 
 
@@ -20,25 +21,40 @@ public class Main {
         System.out.println("Enter password: ");
         String password = encryptThisString(scan.nextLine());
 
-        // besser implementieren
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("key", "value");
-        jsonObject.put("key2", "value2");
-        FileWriter file = new FileWriter("output.json");
-        file.write(jsonObject.toJSONString());
-        file.close();
+        Main exists = new Main();
 
-        dict.put("50a9ac4b554ca3bbd4b4ddf0f284fdfb5031d8eddb4131d3c2c54f0bd8ae2038be250dc1daf93b05bd73bfda51dc734b2a3d071dcbe329d41a989142d1e77d70", encryptThisString("password123"));
-
+        if (!exists.checkExistence("config.json")) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(encryptThisString("robert"), encryptThisString("password123"));
+            jsonObject.put(encryptThisString("Jakob"), encryptThisString("Waibel"));
+            FileWriter file = new FileWriter("config.json");
+            file.write(jsonObject.toJSONString());
+            file.close();
+        }
 
         Main check = new Main();
 
-        if (check.is_valid_credentials(dict, username, password)) {
+        if (check.is_valid_credentials(username, password)) {
             System.out.println("Access granted!");
         } else {
             System.out.println("Access denied! Please check if your username and password were spelled correctly");
         }
 
+    }
+
+    public boolean checkExistence(String fileName)
+    {
+        // Creating Method of Class File to use exists() method
+        File tempMedia = new File(fileName);
+
+        // If File exists return true
+        if (tempMedia.exists())
+        {
+            return true;
+        }
+
+        // If no File exists so far return false and display the message below
+        return false;
     }
 
     public static String encryptThisString(String input) {
@@ -61,7 +77,6 @@ public class Main {
             while (hashtext.length() < 32) {
                 hashtext = "0" + hashtext;
             }
-
             // return the HashText
             return hashtext;
         }
@@ -71,15 +86,14 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
-    public boolean is_valid_credentials(HashMap<String, String> dict, String username, String password) {
+    public boolean is_valid_credentials(String username, String password) throws IOException, ParseException {
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("config.json"));
 
-        for (String i : dict.keySet()) {
-            if (i.equals(username) && dict.get(username).equals(password)) {
-                return true;
-            }
+        if (jsonObject.containsKey(username) && jsonObject.get(username).equals(password)) {
+            return true;
         }
         return false;
-
     }
 
 }
