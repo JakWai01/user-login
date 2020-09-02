@@ -14,7 +14,7 @@ public class Main {
 
 
         /*HashMap<String, String> dict = new HashMap<>();*/
-        // register or login?
+
         System.out.println("Choose operation:\nREGISTER (1)\nLOGIN (2)");
         Scanner scan = new Scanner(System.in);
         int operation = scan.nextInt();
@@ -109,7 +109,7 @@ public class Main {
     public boolean is_valid_credentials(String username, String password) throws IOException, ParseException {
         /*JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("config.json"));
-*//*jsonObject.containsKey(username) && jsonObject.get(username).equals(password)*/
+        *//*jsonObject.containsKey(username) && jsonObject.get(username).equals(password)*/
         SelectRecords select = new SelectRecords();
 
         if (select.selectAll(username, password)) {
