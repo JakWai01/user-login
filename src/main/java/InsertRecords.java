@@ -7,7 +7,7 @@ public class InsertRecords {
 
     private Connection connect() {
         // SQLite connection string  
-        String url = "jdbc:sqlite:test.db";
+        String url = "jdbc:sqlite:userdata.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -18,14 +18,14 @@ public class InsertRecords {
     }
 
 
-    public void insert(String name, double capacity) {
+    public void insert(String username, String password) {
         String sql = "INSERT INTO users(username_hash, password_hash) VALUES(?,?)";
 
         try{
             Connection conn = this.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, name);
-            pstmt.setDouble(2, capacity);
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

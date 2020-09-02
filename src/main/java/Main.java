@@ -13,36 +13,56 @@ public class Main {
 
 
 
-        HashMap<String, String> dict = new HashMap<>();
-
+        /*HashMap<String, String> dict = new HashMap<>();*/
+        // register or login?
+        System.out.println("Choose operation:\nREGISTER (1)\nLOGIN (2)");
         Scanner scan = new Scanner(System.in);
-        System.out.println("Enter username: ");
-        String username = encryptThisString(scan.nextLine());
-        System.out.println("Enter password: ");
-        String password = encryptThisString(scan.nextLine());
+        int operation = scan.nextInt();
 
-        Main exists = new Main();
+        if (operation == 1) {
 
-        if (!exists.checkExistence("config.json")) {
+            Create.createNewDatabase("userdata.db");
+            CreateTable.createNewTable();
+            InsertRecords rec = new InsertRecords();
+            System.out.println("Please enter a new username: ");
+            String newusername = encryptThisString(scan.next());
+            System.out.println("Please enter a new password:");
+            String newpassword = encryptThisString(scan.next());
+            rec.insert(newusername, newpassword);
+
+        }
+        if (operation == 2) {
+            System.out.println("Enter username: ");
+            String username = encryptThisString(scan.next());
+            System.out.println("Enter password: ");
+            String password = encryptThisString(scan.next());
+            Main check = new Main();
+
+            if (check.is_valid_credentials(username, password)) {
+                System.out.println("Access granted!");
+            } else {
+                System.out.println("Access denied! Please check if your username and password were spelled correctly");
+            }
+        }
+
+
+
+        // Main exists = new Main();
+
+        /*if (!exists.checkExistence("config.json")) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(encryptThisString("robert"), encryptThisString("password123"));
             jsonObject.put(encryptThisString("Jakob"), encryptThisString("Waibel"));
             FileWriter file = new FileWriter("config.json");
             file.write(jsonObject.toJSONString());
             file.close();
-        }
+        }*/
 
-        Main check = new Main();
 
-        if (check.is_valid_credentials(username, password)) {
-            System.out.println("Access granted!");
-        } else {
-            System.out.println("Access denied! Please check if your username and password were spelled correctly");
-        }
 
     }
 
-    public boolean checkExistence(String fileName)
+    /*public boolean checkExistence(String fileName)
     {
         // Creating Method of Class File to use exists() method
         File tempMedia = new File(fileName);
@@ -55,7 +75,7 @@ public class Main {
 
         // If no File exists so far return false and display the message below
         return false;
-    }
+    }*/
 
     public static String encryptThisString(String input) {
         try {
@@ -87,10 +107,12 @@ public class Main {
         }
     }
     public boolean is_valid_credentials(String username, String password) throws IOException, ParseException {
-        JSONParser jsonParser = new JSONParser();
+        /*JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("config.json"));
+*//*jsonObject.containsKey(username) && jsonObject.get(username).equals(password)*/
+        SelectRecords select = new SelectRecords();
 
-        if (jsonObject.containsKey(username) && jsonObject.get(username).equals(password)) {
+        if (select.selectAll(username, password)) {
             return true;
         }
         return false;

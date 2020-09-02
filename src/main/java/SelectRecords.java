@@ -8,7 +8,7 @@ public class SelectRecords {
 
     private Connection connect() {
         // SQLite connection string  
-        String url = "jdbc:sqlite:test.db";
+        String url = "jdbc:sqlite:userdata.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -18,10 +18,10 @@ public class SelectRecords {
         return conn;
     }
 
-
-    public void selectAll(){
+    // Hier wurde String username und String password eingefügt
+    public boolean selectAll(String username, String password){
         String sql = "SELECT * FROM users";
-
+        // select all and search for the right one
         try {
             Connection conn = this.connect();
             Statement stmt  = conn.createStatement();
@@ -29,12 +29,15 @@ public class SelectRecords {
 
             // loop through the result set  
             while (rs.next()) {
-                System.out.println(rs.getString("username_hash") +  "\t" +
-                        rs.getString("password_hash"));
+                if (rs.getString("username_hash").equals(username) && rs.getString("password_hash").equals(password)) {
+                    return true;
+                }
             }
+            return false;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return false;
     }
 
 
